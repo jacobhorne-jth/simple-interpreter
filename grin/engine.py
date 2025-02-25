@@ -1,4 +1,4 @@
-
+from grin.statements.jump_statements import LabelStatement
 from grin.errors import GrinRuntimeError
 
 
@@ -10,8 +10,7 @@ class InterpreterEngine:
         self.labels = {}
         self.terminate = False
         self.call_stack = []
-        #handles creating the labels before executing statements
-        #self._index_labels()
+        self._index_labels()
 
     def _index_labels(self) -> None:
         """Scan the program and record labels with their statement index."""
@@ -28,13 +27,9 @@ class InterpreterEngine:
         """Runs the interpreter"""
         while self.current_line < len(self.program) and not self.terminate:
             statement = self.program[self.current_line]
-            #checks if label statement because those handled differently
-            '''
             if isinstance(statement, list):
                 if isinstance(statement[0], LabelStatement):
                     statement = statement[1]
-                    
-            '''
 
             statement.execute(self)
             self.current_line += 1
