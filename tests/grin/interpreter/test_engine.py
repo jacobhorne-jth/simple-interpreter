@@ -81,7 +81,7 @@ class TestInterpreterEngine(unittest.TestCase):
         var_token = GrinToken(kind=GrinTokenKind.IDENTIFIER, text="a", location=None)
         value_token = GrinToken(kind=GrinTokenKind.LITERAL_INTEGER, text="10", location=None, value=10)
         let_stmt = LetStatement(var_token, value_token)
-        program = [label, let_stmt]  # Ensure statements are correctly structured
+        program = [[label, let_stmt]]  # Ensure statements are correctly structured
 
         engine = InterpreterEngine(program)
         engine.run()
@@ -102,8 +102,9 @@ class TestInterpreterEngine(unittest.TestCase):
         with contextlib.redirect_stdout(output):
             engine.run()
 
-        self.assertTrue(engine.terminate)  # Should be set to True
-        self.assertNotIn("20", output.getvalue())  # "20" should not be printed because EndStatement stops execution
+        self.assertTrue(engine.terminate)
+        self.assertNotIn("20", output.getvalue())
+
 
 
 if __name__ == "__main__":

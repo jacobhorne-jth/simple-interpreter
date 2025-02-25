@@ -2,7 +2,7 @@ import unittest
 from grin.interpreter.parser import statement_creator, parse_statements_into_objects
 from grin.token import GrinToken, GrinTokenKind
 from grin.statements.basic_statements import LetStatement, PrintStatement, EndStatement
-from grin.statements.jump_statements import LabelStatement
+from grin.statements.jump_statements import LabelStatement, GosubStatement, GotoStatement
 from grin.interpreter.errors import GrinParseError
 
 
@@ -172,6 +172,124 @@ class TestParser(unittest.TestCase):
             statement_creator(tokens)
 
         self.assertIn("Empty statement", str(cm.exception))
+
+    def test_statement_creator_goto_unconditional(self):
+        """Test statement_creator with an unconditional GOTO"""
+        tokens = [
+            GrinToken(kind = GrinTokenKind.GOTO, text = "GOTO", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "5", location = None, value = 5),
+        ]
+
+        statement = statement_creator(tokens)
+        self.assertIsInstance(statement, GotoStatement)
+        self.assertEqual(statement.target.value(), 5)
+        self.assertIsNone(statement.condition_left)
+
+    def test_statement_creator_gosub_unconditional(self):
+        """Test statement_creator with an unconditional GOSUB"""
+        tokens = [
+            GrinToken(kind = GrinTokenKind.GOSUB, text = "GOSUB", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "10", location = None,
+                      value = 10),
+        ]
+
+        statement = statement_creator(tokens)
+        self.assertIsInstance(statement, GosubStatement)
+        self.assertEqual(statement.target.value(), 10)
+        self.assertIsNone(statement.condition_left)
+
+    def test_statement_creator_goto_conditional(self):
+        """Test statement_creator with a conditional GOTO"""
+        tokens = [
+            GrinToken(kind = GrinTokenKind.GOTO, text = "GOTO", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "3", location = None, value = 3),
+            GrinToken(kind = GrinTokenKind.IF, text = "IF", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "5", location = None, value = 5),
+            GrinToken(kind = GrinTokenKind.GREATER_THAN, text = ">", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "2", location = None, value = 2),
+        ]
+
+        statement = statement_creator(tokens)
+        self.assertIsInstance(statement, GotoStatement)
+        self.assertEqual(statement.target.value(), 3)
+        self.assertEqual(statement.condition_left.value(), 5)
+        self.assertEqual(statement.operator.kind(), GrinTokenKind.GREATER_THAN)
+        self.assertEqual(statement.condition_right.value(), 2)
+
+    def test_statement_creator_gosub_conditional(self):
+        """Test statement_creator with a conditional GOSUB"""
+        tokens = [
+            GrinToken(kind = GrinTokenKind.GOSUB, text = "GOSUB", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "8", location = None, value = 8),
+            GrinToken(kind = GrinTokenKind.IF, text = "IF", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "10", location = None,
+                      value = 10),
+            GrinToken(kind = GrinTokenKind.LESS_THAN, text = "<", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "15", location = None,
+                      value = 15),
+        ]
+
+        statement = statement_creator(tokens)
+        self.assertIsInstance(statement, GosubStatement)
+        self.assertEqual(statement.target.value(), 8)
+        self.assertEqual(statement.condition_left.value(), 10)
+        self.assertEqual(statement.operator.kind(), GrinTokenKind.LESS_THAN)
+        self.assertEqual(statement.condition_right.value(), 15)
+
+    def test_statement_creator_goto_missing_target(self):
+        """Test statement_creator raises error for GOTO missing target"""
+        tokens = [GrinToken(kind = GrinTokenKind.GOTO, text = "GOTO", location = None)]
+        with self.assertRaises(IndexError):
+            statement_creator(tokens)
+
+    def test_statement_creator_gosub_missing_target(self):
+        """Test statement_creator raises error for GOSUB missing target"""
+        tokens = [GrinToken(kind = GrinTokenKind.GOSUB, text = "GOSUB", location = None)]
+        with self.assertRaises(IndexError):
+            statement_creator(tokens)
+
+    def test_statement_creator_goto_invalid_condition(self):
+        """Test statement_creator raises error for invalid conditional GOTO"""
+        tokens = [
+            GrinToken(kind = GrinTokenKind.GOTO, text = "GOTO", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "3", location = None, value = 3),
+            GrinToken(kind = GrinTokenKind.IF, text = "IF", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "5", location = None, value = 5),
+            # Missing operator and condition_right
+        ]
+
+        with self.assertRaises(IndexError):
+            statement_creator(tokens)
+
+    def test_statement_creator_gosub_invalid_condition(self):
+        """Test statement_creator raises error for invalid conditional GOSUB"""
+        tokens = [
+            GrinToken(kind = GrinTokenKind.GOSUB, text = "GOSUB", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "8", location = None, value = 8),
+            GrinToken(kind = GrinTokenKind.IF, text = "IF", location = None),
+            GrinToken(kind = GrinTokenKind.LITERAL_INTEGER, text = "10", location = None,
+                      value = 10),
+            # Missing operator and condition_right
+        ]
+
+        with self.assertRaises(IndexError):
+            statement_creator(tokens)
+
+    def test_statement_creator_goto_unexpected_token_count(self):
+        """Test statement_creator raises error for unexpected token count in GOTO"""
+        tokens = [
+            GrinToken(kind = GrinTokenKind.GOTO, text = "GOTO", location = None),
+        ]
+        with self.assertRaises(IndexError):
+            statement_creator(tokens)
+
+    def test_statement_creator_gosub_unexpected_token_count(self):
+        """Test statement_creator raises error for unexpected token count in GOSUB"""
+        tokens = [
+            GrinToken(kind = GrinTokenKind.GOSUB, text = "GOSUB", location = None),
+        ]
+        with self.assertRaises(IndexError):
+            statement_creator(tokens)
 
 
 if __name__ == "__main__":
