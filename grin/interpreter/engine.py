@@ -1,5 +1,5 @@
 from grin.statements.jump_statements import LabelStatement
-from grin.errors import GrinRuntimeError
+from grin.interpreter.errors import GrinRuntimeError
 
 
 class InterpreterEngine:

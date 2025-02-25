@@ -1,6 +1,7 @@
 from grin.token import GrinToken, GrinTokenKind
-from grin.errors import GrinRuntimeError, GrinParseError
+from grin.interpreter.errors import GrinParseError
 from grin.statements.jump_statements import LabelStatement
+from grin.statements.basic_statements import LetStatement, PrintStatement
 
 
 def statement_creator(token: list[GrinToken]) -> "Statement":
@@ -10,7 +11,8 @@ def statement_creator(token: list[GrinToken]) -> "Statement":
 
     # Dictionary mapping tokens to their corresponding statement classes
     statement_classes = {
-
+        GrinTokenKind.LET: LetStatement,
+        GrinTokenKind.PRINT: PrintStatement,
     }
 
     # Create an instance of the corresponding statement class

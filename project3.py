@@ -1,6 +1,6 @@
 from grin.parsing import parse
-from grin.parser import parse_statements_into_objects
-from grin.engine import InterpreterEngine
+from grin.interpreter import parse_statements_into_objects
+from grin.interpreter.engine import InterpreterEngine
 
 
 def main() -> None:
