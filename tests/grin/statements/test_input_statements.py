@@ -1,10 +1,8 @@
-import unittest
-import io
-import sys
-import contextlib
+import unittest, io, sys, contextlib
 from grin.statements.input_statements import InnumStatement, InstrStatement
 from grin.token import GrinToken, GrinTokenKind
 from grin.interpreter.errors import GrinRuntimeError
+
 
 
 class MockInterpreterEngine:
@@ -23,7 +21,7 @@ class TestInnumStatement(unittest.TestCase):
         var_token = GrinToken(kind=GrinTokenKind.IDENTIFIER, text="num", location=None)
         stmt = InnumStatement(var_token)
 
-        inp = io.StringIO("42\n")
+        inp = io.StringIO("42\n")  # Simulating user input
         sys.stdin = inp
         out = io.StringIO()
 
@@ -37,7 +35,7 @@ class TestInnumStatement(unittest.TestCase):
         var_token = GrinToken(kind=GrinTokenKind.IDENTIFIER, text="num", location=None)
         stmt = InnumStatement(var_token)
 
-        inp = io.StringIO("3.14\n")
+        inp = io.StringIO("3.14\n")  # Simulating user input
         sys.stdin = inp
         out = io.StringIO()
 
@@ -51,7 +49,7 @@ class TestInnumStatement(unittest.TestCase):
         var_token = GrinToken(kind=GrinTokenKind.IDENTIFIER, text="num", location=None)
         stmt = InnumStatement(var_token)
 
-        inp = io.StringIO(".5\n")
+        inp = io.StringIO(".5\n")  # Simulating invalid input
         sys.stdin = inp
         out = io.StringIO()
 
@@ -66,7 +64,7 @@ class TestInnumStatement(unittest.TestCase):
         var_token = GrinToken(kind=GrinTokenKind.IDENTIFIER, text="num", location=None)
         stmt = InnumStatement(var_token)
 
-        inp = io.StringIO("hello\n")
+        inp = io.StringIO("hello\n")  # Simulating invalid input
         sys.stdin = inp
         out = io.StringIO()
 
@@ -87,7 +85,7 @@ class TestInstrStatement(unittest.TestCase):
         var_token = GrinToken(kind=GrinTokenKind.IDENTIFIER, text="text", location=None)
         stmt = InstrStatement(var_token)
 
-        inp = io.StringIO("hello world\n")
+        inp = io.StringIO("hello world\n")  # Simulating user input
         sys.stdin = inp
         out = io.StringIO()
 
@@ -101,14 +99,14 @@ class TestInstrStatement(unittest.TestCase):
         var_token = GrinToken(kind=GrinTokenKind.IDENTIFIER, text="text", location=None)
         stmt = InstrStatement(var_token)
 
-        inp = io.StringIO("\n")
+        inp = io.StringIO("\n")  # Simulating empty input
         sys.stdin = inp
         out = io.StringIO()
 
         with contextlib.redirect_stdout(out):
             stmt.execute(self.engine)
 
-        self.assertEqual(self.engine.variables["text"], "")
+        self.assertEqual(self.engine.variables["text"], "")  # Should store an empty string
 
 
 if __name__ == "__main__":

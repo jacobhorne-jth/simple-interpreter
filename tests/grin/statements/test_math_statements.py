@@ -6,7 +6,6 @@ from grin.interpreter.errors import GrinRuntimeError
 
 class MockInterpreterEngine:
     """Mock interpreter engine to test variable storage."""
-
     def __init__(self):
         self.variables = {}
 

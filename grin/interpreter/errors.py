@@ -10,6 +10,7 @@ class GrinRuntimeError(Exception):
         super().__init__(message)
         self.message = message
 
-
-
-
+__all__ = [
+    GrinParseError.__name__,
+    GrinRuntimeError.__name__
+]

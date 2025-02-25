@@ -1,7 +1,6 @@
 from grin.statements.jump_statements import LabelStatement
 from grin.interpreter.errors import GrinRuntimeError
 
-
 class InterpreterEngine:
     def __init__(self, program):
         self.program = program
@@ -35,5 +34,5 @@ class InterpreterEngine:
             self.current_line += 1
 
 __all__ = [
-    InterpreterEngine.__name__,
+    InterpreterEngine.__name__
 ]

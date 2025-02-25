@@ -1,4 +1,7 @@
-from grin import Statement, GrinRuntimeError, evaluate_expression
+from grin.statements.basic_statements import Statement
+from grin.interpreter.errors import GrinRuntimeError
+from grin.statements.basic_statements import evaluate_expression
+
 
 class MathStatement(Statement):
     """Base class for math operations like ADD, SUB, MULT, DIV"""
@@ -61,10 +64,11 @@ class DivStatement(MathStatement):
             return left / right
         raise GrinRuntimeError(f'Cannot divide {type(left).__name__} by {type(right).__name__}')
 
+
 __all__ = [
     MathStatement.__name__,
     AddStatement.__name__,
     SubStatement.__name__,
     MultStatement.__name__,
-    DivStatement.__name__,
+    DivStatement.__name__
 ]

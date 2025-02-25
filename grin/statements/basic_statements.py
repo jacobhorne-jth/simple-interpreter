@@ -41,3 +41,12 @@ class EndStatement(Statement):
     """End statement class for Grin End statements"""
     def execute(self, interpreter_engine):
         interpreter_engine.terminate = True
+
+
+__all__ = [
+    evaluate_expression.__name__,
+    Statement.__name__,
+    LetStatement.__name__,
+    PrintStatement.__name__,
+    EndStatement.__name__
+]

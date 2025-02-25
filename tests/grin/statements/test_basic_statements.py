@@ -5,12 +5,11 @@ from grin.interpreter.errors import GrinRuntimeError
 from grin.token import GrinToken, GrinTokenKind
 from grin.statements.basic_statements import evaluate_expression, LetStatement, PrintStatement, EndStatement
 
-
 class MockInterpreterEngine:
     """Mock interpreter engine to test variable storage."""
     def __init__(self):
         self.variables = {}
-
+        self.terminate = False
 
 class TestEvaluateExpression(unittest.TestCase):
     def setUp(self):

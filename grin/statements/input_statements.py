@@ -1,4 +1,5 @@
-from grin import Statement, GrinRuntimeError
+from grin.statements.basic_statements import Statement
+from grin.interpreter.errors import GrinRuntimeError
 
 class InputStatement(Statement):
     """Base class for all Grin Input statements"""
