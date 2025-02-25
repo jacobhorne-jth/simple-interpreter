@@ -10,11 +10,23 @@
 # offloading as much of the complexity as you can into additional modules in
 # the 'grin' package, isolated in a way that allows you to unit test them.
 
-import grin
+from grin.parsing import parse
 
 
 def main() -> None:
-    pass
+    statement_list = []
+    try:
+        while True:
+            statement = input()
+            if statement.strip() == ".":
+                break
+            statement_list.append(statement)
+
+        parsed_statements = list(parse(statement_list))
+    except Exception as e:
+        print(str(e))
+
+
 
 
 if __name__ == '__main__':
