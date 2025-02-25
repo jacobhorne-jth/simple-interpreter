@@ -1,8 +1,7 @@
-from grin import EndStatement
-from grin.token import GrinToken, GrinTokenKind
+from grin.token import GrinTokenKind, GrinToken
 from grin.interpreter.errors import GrinParseError
-from grin.statements.jump_statements import LabelStatement
 from grin.statements.basic_statements import LetStatement, PrintStatement, EndStatement
+from grin.statements.jump_statements import LabelStatement
 
 
 def statement_creator(token: list[GrinToken]) -> "Statement":
@@ -50,6 +49,7 @@ def parse_statements_into_objects(token_list: list[list[GrinToken]]) -> list:
         else:
             statements.append(statement_creator(tokens))
         return statements
+
 
 __all__ = [
     statement_creator.__name__,
