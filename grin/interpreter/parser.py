@@ -1,7 +1,8 @@
+from grin import EndStatement
 from grin.token import GrinToken, GrinTokenKind
 from grin.interpreter.errors import GrinParseError
 from grin.statements.jump_statements import LabelStatement
-from grin.statements.basic_statements import LetStatement, PrintStatement
+from grin.statements.basic_statements import LetStatement, PrintStatement, EndStatement
 
 
 def statement_creator(token: list[GrinToken]) -> "Statement":
@@ -13,6 +14,7 @@ def statement_creator(token: list[GrinToken]) -> "Statement":
     statement_classes = {
         GrinTokenKind.LET: LetStatement,
         GrinTokenKind.PRINT: PrintStatement,
+        GrinTokenKind.END: EndStatement
     }
 
     # Create an instance of the corresponding statement class
@@ -41,14 +43,15 @@ def parse_statements_into_objects(token_list: list[list[GrinToken]]) -> list:
             if remaining_tokens:
                 try:
                     statement = statement_creator(remaining_tokens)
-                    #Label statement implementation when label statement class is created
-                    #statements.append([(LabelStatement(label_name)), statement])
+
+                    statements.append([(LabelStatement(label_name)), statement])
                 except GrinParseError as e:
                     raise GrinParseError(f"Error after label {label_name}: {e}")
         else:
             statements.append(statement_creator(tokens))
         return statements
 
-
-
-
+__all__ = [
+    statement_creator.__name__,
+    parse_statements_into_objects.__name__
+]

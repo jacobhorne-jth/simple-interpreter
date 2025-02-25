@@ -1,5 +1,5 @@
+from grin.token import GrinTokenKind, GrinToken
 from grin.interpreter.errors import GrinRuntimeError
-from grin.token import GrinToken, GrinTokenKind
 
 def evaluate_expression(value, engine):
     """Evaluates whether a value is a literal, variable, or label reference."""
@@ -37,5 +37,7 @@ class PrintStatement(Statement):
     def execute(self, interpreter_engine):
         print(evaluate_expression(self.print_value, interpreter_engine))
 
-
-
+class EndStatement(Statement):
+    """End statement class for Grin End statements"""
+    def execute(self, interpreter_engine):
+        interpreter_engine.terminate = True

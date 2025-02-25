@@ -3,12 +3,11 @@ import io
 import contextlib
 from grin.interpreter.errors import GrinRuntimeError
 from grin.token import GrinToken, GrinTokenKind
-from grin.statements.basic_statements import evaluate_expression, LetStatement, PrintStatement
+from grin.statements.basic_statements import evaluate_expression, LetStatement, PrintStatement, EndStatement
 
 
 class MockInterpreterEngine:
     """Mock interpreter engine to test variable storage."""
-
     def __init__(self):
         self.variables = {}
 
@@ -108,6 +107,18 @@ class TestPrintStatement(unittest.TestCase):
 
         self.assertEqual(captured_output.getvalue().strip(), "42")
 
+class TestEndStatement(unittest.TestCase):
+    def setUp(self):
+        self.engine = MockInterpreterEngine()
+
+    def test_end_statement_sets_terminate_flag(self):
+        """Test that executing EndStatement sets terminate flag to True"""
+        stmt = EndStatement()
+        self.assertFalse(self.engine.terminate)  # Ensure it's initially False
+
+        stmt.execute(self.engine)
+
+        self.assertTrue(self.engine.terminate)
 
 if __name__ == "__main__":
     unittest.main()
