@@ -1,7 +1,4 @@
 import unittest, io, sys, contextlib
-from grin.parsing import parse
-from grin.interpreter.engine import InterpreterEngine
-from grin.interpreter.parser import parse_statements_into_objects
 from project3 import main
 
 
