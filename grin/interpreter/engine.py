@@ -33,3 +33,7 @@ class InterpreterEngine:
 
             statement.execute(self)
             self.current_line += 1
+
+__all__ = [
+    InterpreterEngine.__name__,
+]
