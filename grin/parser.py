@@ -1,10 +1,28 @@
 from grin.token import GrinToken, GrinTokenKind
 from grin.errors import GrinRuntimeError, GrinParseError
+from grin.statements.jump_statements import LabelStatement
 
 
 def statement_creator(token: list[GrinToken]) -> "Statement":
     """Parses tokens into corresponding statement objects."""
-    pass
+    if not token:
+        raise GrinParseError("Empty statement encountered.")
+
+    # Dictionary mapping tokens to their corresponding statement classes
+    statement_classes = {
+
+    }
+
+    # Create an instance of the corresponding statement class
+    kind = token[0].kind()
+    if kind in statement_classes:
+        return statement_classes[kind](*token[1:])
+
+    # If the statement is a label return a LabelStatement
+    if len(token) >= 2 and token[1].kind() == GrinTokenKind.COLON:
+        return LabelStatement(token[0].text())
+
+    raise GrinParseError(f"Unknown statement: {token[0].text()}")
 
 
 def parse_statements_into_objects(token_list: list[list[GrinToken]]) -> list:
