@@ -10,6 +10,7 @@ def evaluate_expression(value, engine):
         elif value.kind() == GrinTokenKind.IDENTIFIER:
             return engine.variables.get(value.text(), 0)
     elif isinstance(value, str):
+        print(f'it happened {value}')
         return value
     elif isinstance(value, int):
         return value

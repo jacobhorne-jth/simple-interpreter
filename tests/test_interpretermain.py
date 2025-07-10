@@ -1,8 +1,8 @@
 import unittest, io, sys, contextlib
-from project3 import main
+from interpretermain import main
 
 
-class TestProject3(unittest.TestCase):
+class TestInterpreterMain(unittest.TestCase):
     def setUp(self):
         """Redirect stdin and stdout for testing."""
         self.input_backup = sys.stdin
